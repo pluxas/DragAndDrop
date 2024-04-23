@@ -1,23 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
 
 function App() {
+  const [drag, setDrag] = useState(false);
+  const [file, setFile] = useState([])
+
+  const dragStartHandler = (e) => {
+    e.preventDefault();
+    setDrag(true);
+  };
+
+  const dragLeaveHandler = (e) => {
+    e.preventDefault(e);
+    setDrag(false);
+  };
+
+  const onDropHandler = (e) => {
+    e.preventDefault(e);
+    let files = [...e.dataTransfer.files];
+    setFile(files)
+    setDrag(false)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="app">
+      {drag ? (
+        <div
+          onDragStart={(e) => dragStartHandler(e)}
+          onDragLeave={(e) => dragLeaveHandler(e)}
+          onDragOver={(e) => dragStartHandler(e)}
+          onDrop={(e) => onDropHandler(e)}
+          className="drop-area"
         >
-          Learn React
-        </a>
-      </header>
+          Отпустите файл чтобы загрузить их
+        </div>
+      ) : (
+        <div
+          onDragStart={(e) => dragStartHandler(e)}
+          onDragLeave={(e) => dragLeaveHandler(e)}
+          onDragOver={(e) => dragStartHandler(e)}
+        >
+          Переташите файл чтобы загрузить их
+        </div>
+      )}
     </div>
   );
 }
